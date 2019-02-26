@@ -1,0 +1,14 @@
+{
+  "name": "asciidoctor-code-samples",
+  "version": "1.0.0-alpha.1",
+  "description": "Asciidoctor tabbed code samples js extension",
+  "main": "src/asciidoctor-code-samples.js",
+  "scripts": {
+    "clean": "rm -rf dist/*",
+    "dist": "npm run clean && npm run dist:node",
+    "dist:node": "mkdir -p dist/node && cp src/**.js dist/node/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Telestax Inc.",
+  "license": "ISC"
+}
