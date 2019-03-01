@@ -1,0 +1,3 @@
+curl -X ${attrs.httpMethod} https://cloud.restcomm.com/restcomm/2012-04-24/${attrs.urlSuffix} \
+${attrs.normalizedPostParameters} \
+   -u 'YourAccountSid:YourAuthToken'

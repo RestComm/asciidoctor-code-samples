@@ -1,176 +1,112 @@
-const util = require('util')
+const fs = require('fs')
+const template = require('es6-template-strings')
 
-function generateCurlSample(attrs) {
-  // Notice we cannot indent this properly as it is a 'pre' block and any whitespaces will mess up the result
-  return `
-<div id="Curl" class="sample-language">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ curl -X ${attrs.httpMethod} https://cloud.restcomm.com/restcomm/2012-04-24/Accounts/${attrs.urlSuffix}
-${attrs.postParametersCurl}
--u &lt;accountSid&gt;:&lt;authToken&gt;</code></pre>
-  </div>`
-}
+// We will be hosting multiple sample code sections in every API page, so let's increment a global index so that
+// each sample section has unique css classes and ids and the js code for tab manipulation doesn't break.
+let sampleCodeSectionIndex = 1;
+let currentFile = ''
 
-function generateJavaSample(attrs) {
-  // Notice we cannot indent this properly as it is a 'pre' block and any whitespaces will mess up the result
-  return `
-<div id="Java" class="sample-language" style="display:none">
-    <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import ...;
+function generateSample(attrs, templateFile, language, dataLanguage) {
+  // Fix the request parameters for POST methods because they are using the java format. We need to adjust for the rest of the languages
+  if (attrs.httpMethod === 'POST') {
+    if (templateFile.includes("python")) {
+      // Normalize from "From=19876543212&To=13216549878&..." to "'From': '19876543212', 'To': '13216549878', ..."
+      const params = attrs.postParameters.split('&')
+      attrs.normalizedPostParameters = params.map((keyValue) => {
+        const split = keyValue.split('=')
+        return `   '${split[0]}': '${split[1]}'`
+      }).join(',\n')
+    }
+    else if (templateFile.includes("curl")) {
+      // Normalize from "From=19876543212&To=13216549878&..." to "-d 'From=19876543212', 'To=13216549878', ..."
+      attrs.normalizedPostParameters = attrs.postParameters.split('&')
+        .map(keyValue => `   -d '${keyValue}'`)
+        .join(" \\ \n")
+    }
+    else {
+      // For Java Post parameters are already in normalized form, we just need to beautify a bit
+      //attrs.normalizedPostParameters = attrs.postParameters
+      attrs.normalizedPostParameters = attrs.postParameters.split('&')
+        .map(keyValue => `${keyValue}&`)
+        .join("\" + \n        \"")
 
-  public class Example {
-    // Find your Account Sid and Token at Restcomm Console
-    public static final String ACCOUNT_SID = "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-    public static final String AUTH_TOKEN = "your_auth_token";
-
-    public static void main(String[] args) {
-  ...
-    SMSMessage message = SMSMessage.creator(
-    ${attrs.postParametersJava}
-      .create();
+      // remove last '&'
+      if (attrs.normalizedPostParameters[attrs.normalizedPostParameters.length - 1] === '&') {
+        attrs.normalizedPostParameters = attrs.normalizedPostParameters.slice(0, -1)
+      }
+    }
   }
-}</code></pre>
-</div>`
+
+  // Read template from file and evaluate it so that all variables get proper values
+  const templateString = template(fs.readFileSync(__dirname + `/resources/lang-templates/${templateFile}.txt`, 'utf8'), { attrs: attrs });
+
+  // Notice we are replacing 3 or more new lines with just 2 to account for huge empty spaces when some parameters are not populated
+  return `<pre class="highlightjs highlight"><code class="${language} hljs" data-lang="${dataLanguage}">${templateString}</code></pre>`.replace(/(\r\n|\n|\r){3,}/gm, "$1$1");
 }
 
-function generatePythonSample(attrs) {
-  // Notice we cannot indent this properly as it is a 'pre' block and any whitespaces will mess up the result
-  return `
-<div id="Python" class="sample-language" style="display:none">
-<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">import ...
+const generateSamplesDiv = function(parent, attrs) {
+  let divHtml = ''
+  let templateSuffix = ''
+  sampleCodeSectionIndex++
 
-# Your Account Sid and Auth Token from Restcomm Console
-account_sid = 'ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-auth_token = 'your_auth_token'
-client = Client(account_sid, auth_token)
+  if (attrs.httpMethod === 'POST') {
+    templateSuffix = '-post'
+  }
 
-message = client.messages.create(
-                            ${attrs.postParametersPython}
-                          )</code></pre>
-</div>`
-}
-
-const generateSamplesDiv = function(attrs) {
-  return lines =
-     `<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  // Avoid duplicating the same script over and over each time an .adoc has a sample code section. We 're only adding the script once per .adoc
+  if (parent.document.reader.file !== currentFile) {
+    currentFile = parent.document.reader.file
+    divHtml =  `<script>
+      function openLanguage(language, index) {
+        const sampleClasses = document.getElementsByClassName("sample-language-" + index);
+        for (const sampleClass of sampleClasses) {
+          sampleClass.style.display = "none";
+        }
+        document.getElementById(language + '-' + index).style.display = "block";
+      }
+      </script>`
+  }
+  divHtml += `
+      <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
 
       <div class="w3-bar w3-black">
-        <button class="w3-bar-item w3-button" onclick="openLanguage('Curl')">Curl</button>
-        <button class="w3-bar-item w3-button" onclick="openLanguage('Java')">Java</button>
-        <button class="w3-bar-item w3-button" onclick="openLanguage('Python')">Python</button>
+        <button class="w3-bar-item w3-button" onclick="openLanguage('Curl', ${sampleCodeSectionIndex})">Curl</button>
+        <button class="w3-bar-item w3-button" onclick="openLanguage('Java', ${sampleCodeSectionIndex})">Java</button>
+        <button class="w3-bar-item w3-button" onclick="openLanguage('Python', ${sampleCodeSectionIndex})">Python</button>
       </div>
-        ${generateCurlSample(attrs)}
-        ${generateJavaSample(attrs)}
-        ${generatePythonSample(attrs)}
-      <script>
-        function openLanguage(cityName) {
-          var i;
-          var x = document.getElementsByClassName("sample-language");
-          for (i = 0; i < x.length; i++) {
-            x[i].style.display = "none";
-          }
-          document.getElementById(cityName).style.display = "block";
-        }
-      </script>`;
+      <div id="Curl-${sampleCodeSectionIndex}" class="sample-language-${sampleCodeSectionIndex}">
+        ${generateSample(attrs, "curl-template" + templateSuffix, "language-console", "console")}
+      </div>
+      <div id="Java-${sampleCodeSectionIndex}" class="sample-language-${sampleCodeSectionIndex}" style="display:none">
+        ${generateSample(attrs, "java-template" + templateSuffix, "language-java", "java")}
+      </div>
+      <div id="Python-${sampleCodeSectionIndex}" class="sample-language-${sampleCodeSectionIndex}" style="display:none">
+        ${generateSample(attrs, "python-template" + templateSuffix, "language-python", "python")}
+      </div>
+      `;
+  return divHtml;
 }
-
-/*
-const generateChart = function (data, labels, attrs) {
-  return createDiv(data, labels, attrs)
-}
-
-const createDiv = function (data, labels, attrs) {
-  const series = data.map((value, index) => `data-chart-series-${index}="${value.join(',')}"`)
-  const title = attrs.title ? `<div class="title">${attrs.title}</div>\n` : ''
-  const chartHeight = `data-chart-height="${getHeight(attrs)}" `
-  const chartWidth = `data-chart-width="${getWidth(attrs)}" `
-  const chartType = `data-chart-type="${getType(attrs)}" `
-  const chartColors = 'data-chart-colors="#72B3CC,#8EB33B" '
-  const chartLabels = `data-chart-labels="${labels.join(',')}" `
-  return `<div class="openblock">${title}<div class="ct-chart" ${chartHeight}${chartWidth}${chartType}${chartColors}${chartLabels}${series.join(' ')}></div>
-</div>`
-}
-
-const getHeight = function (attrs) {
-  const height = attrs.height
-  return typeof height === 'string' ? height : '400'
-}
-
-const getWidth = function (attrs) {
-  const width = attrs.width
-  return typeof width === 'string' ? width : '600'
-}
-
-const getType = function (attrs) {
-  const type = attrs.type
-  if (type === 'bar') {
-    return 'Bar'
-  } else if (type === 'line') {
-    return 'Line'
-  } else {
-    // By default chart line
-    return 'Line'
-  }
-}
-*/
 
 const chartBlockMacro = function () {
   const self = this
 
   self.named('samplecode')
-  //self.positionalAttributes(['type', 'width', 'height'])
   this.positionalAttributes(['httpMethod', 'urlSuffix']);
 
   self.process(function (parent, target, attrs) {
     attrs = fromHash(attrs);
 
-    //const filePath = parent.normalizeAssetPath(target, 'target')
-    //const fileContent = parent.readAsset(filePath, { 'warn_on_failure': true, 'normalize': true })
-    //if (typeof fileContent === 'string') {
-      //const lines = fileContent.split('\n')
-      //const labels = lines[0].split(',')
-      //lines.shift()
-      //const data = lines.map(line => line.split(','))
-      //const html = generateChart(data, labels, attrs)
-      const html = generateSamplesDiv(attrs)
-      return self.createBlock(parent, 'pass', html, attrs, {})
-    //}
-    //return self.createBlock(parent, 'pass', `<div class="openblock">[file does not exist or cannot be read: ${target}]</div>`, attrs, {})
-  })
-}
-
-/*
-const chartBlock = function () {
-  const self = this
-
-  self.named('chart')
-  self.positionalAttributes(['type', 'width', 'height'])
-  self.$content_model('raw')
-  self.onContext('literal')
-
-  self.process(function (parent, reader, attrs) {
-    const lines = reader.getLines()
-    console.error("-- Parent: " + parent)
-    console.error("-- Lines: " + lines)
-    console.error("-- Attrs: " + attrs.line)
-    if (lines && lines.length === 0) {
-      return self.createBlock(parent, 'pass', '<div class="openblock">[chart is empty]</div>', attrs, {})
-    }
-    const labels = lines[0].split(',')
-    lines.shift()
-    const data = lines.map(line => line.split(','))
-    const html = generateChart(data, labels, attrs)
+    const html = generateSamplesDiv(parent, attrs)
     return self.createBlock(parent, 'pass', html, attrs, {})
   })
 }
-*/
 
 module.exports.register = function register (registry) {
   if (typeof registry.register === 'function') {
     registry.register(function () {
-      //this.block(chartBlock)
       this.blockMacro(chartBlockMacro)
     })
   } else if (typeof registry.block === 'function') {
-    //registry.block(chartBlock)
     registry.blockMacro(chartBlockMacro)
   }
   return registry

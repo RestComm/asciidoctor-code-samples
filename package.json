@@ -2,13 +2,22 @@
   "name": "asciidoctor-code-samples",
   "version": "1.0.0-alpha.1",
   "description": "Asciidoctor tabbed code samples js extension",
-  "main": "src/asciidoctor-code-samples.js",
+  "main": "dist/node/asciidoctor-code-samples.js",
   "scripts": {
     "clean": "rm -rf dist/*",
     "dist": "npm run clean && npm run dist:node",
-    "dist:node": "mkdir -p dist/node && cp src/**.js dist/node/",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dist:node": "mkdir -p dist/node && cp src/**.js dist/node/ && cp -r src/resources dist/node/",
+    "test": "mocha test/**.js"
   },
   "author": "Telestax Inc.",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "es6-template-strings": ">= 2.0.1"
+  },
+  "devDependencies": {
+    "asciidoctor.js": "^1.5.9",
+    "chai": "^4.2.0",
+    "dirty-chai": "^2.0.1",
+    "mocha": "^6.0.2"
+  }
 }
