@@ -7,7 +7,7 @@ Asciidoctor extension that allows to easily add tabbed code samples in various l
 samplecode::sms[httpMethod="GET",urlSuffix="Accounts/YourAccountSid/SMS/Messages.json"]
 ```
 
-And here's the HTML result:
+HTML result:
 
 ![HTTP GET Example](/doc/images/GET-example.png)
 
@@ -17,6 +17,7 @@ And here's the HTML result:
 samplecode::sms[httpMethod="GET",urlSuffix="Accounts/YourAccountSid/SMS/Messages.json?From=19876543212&To=13216549878&StartTime=2018-05-30&EndTime=2018-06-09&Page=0&PageSize=10&SortBy=DateCreated:asc"]
 ```
 
+HTML result:
 
 ![HTTP POST Example](/doc/images/POST-example.png)
 
