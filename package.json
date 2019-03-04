@@ -1,12 +1,17 @@
 {
   "name": "asciidoctor-code-samples",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "Asciidoctor tabbed code samples js extension for API docs",
   "main": "dist/node/asciidoctor-code-samples.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/RestComm/asciidoctor-code-samples.git"
   },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "clean": "rm -rf dist/*",
     "dist": "npm run clean && npm run dist:node",
