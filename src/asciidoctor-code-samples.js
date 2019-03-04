@@ -1,3 +1,7 @@
+/**
+ * @author: Antonis Tsakiridis
+ */
+
 const fs = require('fs')
 const template = require('es6-template-strings')
 
