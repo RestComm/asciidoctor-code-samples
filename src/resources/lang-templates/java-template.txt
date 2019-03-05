@@ -5,16 +5,16 @@ import java.util.Base64;
 
 public class JavaSampleClass {
    // Change 'mycompany' to the desired restcomm organization
-   public static final String restcomm_domain = "mycompany.restcomm.com";
+   public static final String restcommDomain = "mycompany.restcomm.com";
    // Provide your Account Sid and Auth Token from your Console Account page
-   public static final String account_sid = "YourAccountSid";
-   public static final String auth_token = "YourAuthToken";
+   public static final String accountSid = "YourAccountSid";
+   public static final String authToken = "YourAuthToken";
 
    public static void main(String[] args) throws Exception {
-      String userAndPass = account_sid + ':' + auth_token;
+      String userAndPass = accountSid + ':' + authToken;
       String encoded = Base64.getEncoder().encodeToString(userAndPass.getBytes());
 
-      URL url = new URL("https://" + restcomm_domain + "/restcomm/2012-04-24/${attrs.urlSuffix}");
+      URL url = new URL("https://" + restcommDomain + "/restcomm/2012-04-24/${attrs.urlSuffix}");
       HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();
       conn.setRequestProperty("Authorization", "Basic " + encoded);
       conn.setRequestMethod("${attrs.httpMethod}");
