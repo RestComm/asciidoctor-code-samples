@@ -23,8 +23,12 @@ HTML result:
 
 ## Quick start
 
-TODO: Add instructions how to use it. Remember to add some notes on:
-* Supported languages out of the box
-* How templates work
-* How to use from Antora (potentially by providing a playbook example)
-* ...
+TODO:
+
+## How to extend the extension to handle more languages
+
+Say for example that you want to support ruby additionally. What you need to do is:
+* Create nodejs-template.txt for GET requests and nodejs-template-post for POST requests
+* Add normalization logic for the new language in asciidoctor-code-samples.js:generateSample(), before template is 'compiled' from es6-template-strings
+* Add interpolation logic for the new language in asciidoctor-code-samples.js:generateSample() after template is 'compiled' so that any replacements are made before we have additional interpolation
+* Add nodejs generated HTML in asciidoctor-code-samples.js:generateSamplesDiv()

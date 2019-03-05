@@ -1,6 +1,6 @@
 {
   "name": "asciidoctor-code-samples",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.4",
   "description": "Asciidoctor tabbed code samples js extension for API docs",
   "main": "dist/node/asciidoctor-code-samples.js",
   "repository": {
@@ -27,7 +27,8 @@
     "asciidoctor.js": "^1.5.9",
     "chai": "^4.2.0",
     "dirty-chai": "^2.0.1",
-    "mocha": "^6.0.2"
+    "mocha": "^6.0.2",
+    "request": "^2.88.0"
   },
   "bugs": {
     "url": "https://github.com/RestComm/asciidoctor-code-samples/issues"
