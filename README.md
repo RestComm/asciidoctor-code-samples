@@ -26,4 +26,5 @@ HTML result:
 TODO: Add instructions how to use it. Remember to add some notes on:
 * Supported languages out of the box
 * How templates work
+* How to use from Antora (potentially by providing a playbook example)
 * ...
