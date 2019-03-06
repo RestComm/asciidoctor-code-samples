@@ -58,16 +58,16 @@ function generateSample(attrs, templateFile, language, dataLanguage) {
   // Interpolation logic: Each language concatenates strings using different syntax, so let's interpolate differently depending on lang
   let templateStringInterpolated = "";
   if (templateFile.includes("python")) {
-    templateStringInterpolated = templateString.replace('#{account_sid}', '\' + account_sid + \'')
+    templateStringInterpolated = templateString.replace('#(account_sid)', '\' + account_sid + \'')
   }
   else if (templateFile.includes("curl")) {
-    templateStringInterpolated = templateString.replace('#{account_sid}', 'YourAccountSid')
+    templateStringInterpolated = templateString.replace('#(account_sid)', 'YourAccountSid')
   }
   else if (templateFile.includes("node")) {
-    templateStringInterpolated = templateString.replace('#{account_sid}', '\' + accountSid + \'')
+    templateStringInterpolated = templateString.replace('#(account_sid)', '\' + accountSid + \'')
   }
   else if (templateFile.includes("java")) {
-    templateStringInterpolated = templateString.replace('#{account_sid}', '" + accountSid + "')
+    templateStringInterpolated = templateString.replace('#(account_sid)', '" + accountSid + "')
   }
 
   // Notice we are replacing 3 or more new lines with just 2 to account for huge empty spaces when some parameters are not populated
