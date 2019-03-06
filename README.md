@@ -1,30 +1,34 @@
 # asciidoctor-code-samples
 
-Asciidoctor extension that allows to easily add tabbed code samples in various languages for API documentation written in Asciidoctor (including Antora). The extension exposes a new block macro that allows usages like the following:
+[Asciidoctor.js](https://asciidoctor.org/docs/asciidoctor.js/) extension that allows to easily add tabbed source code samples in various programming languages for API documentation written in Asciidoctor (this means it also works with [Antora](https://antora.org/)). The extension exposes a new block macro that allows usages like the following:
 
-* Asciidoctor code for HTTP GET API example:
+##### 1. Asciidoctor code for HTTP GET API example:
 
 ```
 samplecode::sms[httpMethod="GET",urlSuffix="Accounts/#(account_sid)/SMS/Messages.json"]
 ```
 
-HTML result:
+Rendered HTML:
 
 ![HTTP GET Example](/doc/images/GET-example.png)
 
-* Asciidoctor code for HTTP POST API example:
+##### 2. Asciidoctor code for HTTP POST API example:
 
 ```
 samplecode::sms[httpMethod="POST",urlSuffix="Accounts/#(account_sid)/SMS/Messages.json",postParameters="From=19876543212&To=13216549878&Body=Test SMS from Restcomm&StatusCallback=http://status.callback.url"]
 ```
 
-HTML result:
+Rendered HTML:
 
 ![HTTP POST Example](/doc/images/POST-example.png)
 
 ## Quick start
 
 TODO:
+
+## Use from Antora
+
+TODO:  
 
 ## How to extend the extension to handle more languages
 
