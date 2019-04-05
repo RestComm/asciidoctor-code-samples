@@ -1,2 +1,2 @@
-curl -X ${attrs.httpMethod} https://cloud.restcomm.com/restcomm/2012-04-24/${attrs.urlSuffix} \
+curl -X ${attrs.httpMethod} https://mycompany.restcomm.com/restcomm/2012-04-24/${attrs.urlSuffix} \
    -u "YourAccountSid:YourAuthToken"
