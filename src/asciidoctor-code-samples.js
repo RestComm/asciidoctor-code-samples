@@ -10,44 +10,91 @@ const template = require('es6-template-strings')
 let sampleCodeSectionIndex = 1;
 let currentFile = ''
 
+function putOrPost(httpMethod) {
+  return [ 'POST', 'PUT' ].some(value => value === httpMethod);
+}
+
+/**
+ * Generate sample code for the given language, to be put into the generated html
+ * @param attrs, the block macro parameters passed in the .adoc file, like httpMethod, urlSuffix, etc
+ * @param templateFile, the language template file found in resources/lang-templates
+ * @param language, the language for the sample code
+ * @param dataLanguage, the name of the language that the highlighter uses to do proper highlighting
+ * @returns {string}, the html chunk of the generated sample code, to be placed in the tabbed controls for sample code
+ */
 function generateSample(attrs, templateFile, language, dataLanguage) {
   // Normalization logic: Fix the request parameters for POST methods because they are using the java format. We need to adjust for the rest of the languages
   if (templateFile.includes("python")) {
     // Normalize from "From=19876543212&To=13216549878&..." to "'From': '19876543212', 'To': '13216549878', ..."
-    if (attrs.httpMethod === 'POST') {
-      const params = attrs.postParameters.split('&')
-      attrs.normalizedPostParameters = params.map((keyValue) => {
+    if (putOrPost(attrs.httpMethod)) {
+      const params = attrs.bodyParameters.split('&')
+      attrs.normalizedBodyParameters = params.map((keyValue) => {
         const split = keyValue.split('=')
         return `   '${split[0]}': '${split[1]}'`
       }).join(',\n')
     }
   } else if (templateFile.includes("curl")) {
-    if (attrs.httpMethod === 'POST') {
+    if (putOrPost(attrs.httpMethod)) {
       // Normalize from "From=19876543212&To=13216549878&..." to "-d 'From=19876543212', 'To=13216549878', ..."
-      attrs.normalizedPostParameters = attrs.postParameters.split('&')
+      attrs.normalizedBodyParameters = attrs.bodyParameters.split('&')
         .map(keyValue => `   -d '${keyValue}'`)
         .join(" \\ \n")
     }
   } else if (templateFile.includes("node")) {
-    if (attrs.httpMethod === 'POST') {
+    if (putOrPost(attrs.httpMethod)) {
       // Normalize from "From=19876543212&To=13216549878&..." to "'From': '19876543212', 'To': '13216549878', ..."
-      const params = attrs.postParameters.split('&')
-      attrs.normalizedPostParameters = params.map((keyValue) => {
+      const params = attrs.bodyParameters.split('&')
+      attrs.normalizedBodyParameters = params.map((keyValue) => {
         const split = keyValue.split('=')
         return `         '${split[0]}': '${split[1]}'`
       }).join(',\n')
     }
   } else {
-    if (attrs.httpMethod === 'POST') {
+    if (putOrPost(attrs.httpMethod)) {
       // For Java Post parameters are already in normalized form, we just need to beautify a bit
-      //attrs.normalizedPostParameters = attrs.postParameters
-      attrs.normalizedPostParameters = attrs.postParameters.split('&')
+      attrs.normalizedBodyParameters = attrs.bodyParameters.split('&')
         .map(keyValue => `${keyValue}&`)
         .join("\" + \n        \"")
 
       // remove last '&'
-      if (attrs.normalizedPostParameters[attrs.normalizedPostParameters.length - 1] === '&') {
-        attrs.normalizedPostParameters = attrs.normalizedPostParameters.slice(0, -1)
+      if (attrs.normalizedBodyParameters[attrs.normalizedBodyParameters.length - 1] === '&') {
+        attrs.normalizedBodyParameters = attrs.normalizedBodyParameters.slice(0, -1)
+      }
+    }
+  }
+
+  if (language !== 'language-console') {
+    // For curl/console additionalParameters section is not applicable
+    let actualMatches = []
+    const matches = attrs.urlSuffix.match(/#\(\w+?\)/g)
+    if (matches) {
+      matches.forEach(match => {
+        if (!match.includes('account_sid')) {
+          actualMatches.push({match: match, language: language})
+        }
+      })
+
+      if (actualMatches.length > 0) {
+        let spaces = ''
+        if (language === 'language-java')
+          spaces = '   '
+
+        // parse all parameters from urlSuffix, which is in the form 'Accounts/#(account_sid)/SMS/Messages/#(message_sid).json'
+        // and generate additionalParameters section. Notice that we keep accound_sid out because it's already in the template
+        // since it's used always for authentication
+        attrs.additionalParameters = actualMatches
+          .map(element => {
+            const parsed = element.match.match(/^#\((\w*)\)$/)[1];
+            if (element.language === 'language-javascript')
+              return 'const ' + parsed.toUpperCase() + ' = \'my_' + parsed.toUpperCase() + '\'';
+            else if (element.language === 'language-python')
+              return parsed.toUpperCase() + ' = \'my_' + parsed.toUpperCase() + '\'';
+            else if (element.language === 'language-java')
+              return 'public static final String ' + parsed.toUpperCase() + ' = "my_' + parsed.toUpperCase() + '"';
+          })
+          .reduce((accumulator, current) => {
+            return accumulator + '\n' + spaces + current;
+          }, '// Provide additional path parameters if applicable');
       }
     }
   }
@@ -56,19 +103,16 @@ function generateSample(attrs, templateFile, language, dataLanguage) {
   const templateString = template(fs.readFileSync(__dirname + `/resources/lang-templates/${templateFile}.txt`, 'utf8'), { attrs: attrs });
 
   // Interpolation logic: Each language concatenates strings using different syntax, so let's interpolate differently depending on lang
-  let templateStringInterpolated = "";
-  if (templateFile.includes("python")) {
-    templateStringInterpolated = templateString.replace('#(account_sid)', '\' + account_sid + \'')
-  }
-  else if (templateFile.includes("curl")) {
-    templateStringInterpolated = templateString.replace('#(account_sid)', 'YourAccountSid')
-  }
-  else if (templateFile.includes("node")) {
-    templateStringInterpolated = templateString.replace('#(account_sid)', '\' + accountSid + \'')
-  }
-  else if (templateFile.includes("java")) {
-    templateStringInterpolated = templateString.replace('#(account_sid)', '" + accountSid + "')
-  }
+  const templateStringInterpolated = templateString.replace(/#\((\w+?)\)/g, function(match, p1) {
+    if (templateFile.includes("python"))
+      return '\' + ' + p1.toUpperCase() + ' + \''
+    else if (templateFile.includes("curl"))
+      return p1.toUpperCase()
+    else if (templateFile.includes("node"))
+      return '\' + ' + p1.toUpperCase() + ' + \''
+    else // Java
+      return '" + ' + p1.toUpperCase() + ' + "'
+  })
 
   // Notice we are replacing 3 or more new lines with just 2 to account for huge empty spaces when some parameters are not populated
   return `<pre class="highlightjs highlight"><code class="${language} hljs" data-lang="${dataLanguage}">${templateStringInterpolated}</code></pre>`.replace(/(\r\n|\n|\r){3,}/gm, "$1$1");
@@ -79,7 +123,8 @@ const generateSamplesDiv = function(parent, attrs) {
   let templateSuffix = ''
   sampleCodeSectionIndex++
 
-  if (attrs.httpMethod === 'POST') {
+  if (putOrPost(attrs.httpMethod)) {
+    // we're using the same template for both post and put, suffixed with '-post'
     templateSuffix = '-post'
   }
 
@@ -93,15 +138,24 @@ const generateSamplesDiv = function(parent, attrs) {
           sampleClass.style.display = "none";
         }
         document.getElementById(language + '-' + index).style.display = "block";
+        
+        // first, disable the previously selected tab title
+        const previouslyActive = document.getElementsByClassName('scsIndex-' + index + ' is-active')
+        if (previouslyActive.length > 0) {
+          previouslyActive[0].classList.toggle('is-active')
+        }
+
+        // then, enable the newly selected title
+        event.target.classList.toggle('is-active')
       }
       </script>`
   }
   divHtml += `
       <div class="sample-code-bar">
-        <button class="sample-code-button" onclick="openLanguage('Curl', ${sampleCodeSectionIndex})">Curl</button>
-        <button class="sample-code-button" onclick="openLanguage('Nodejs', ${sampleCodeSectionIndex})">Nodejs</button>
-        <button class="sample-code-button" onclick="openLanguage('Python', ${sampleCodeSectionIndex})">Python</button>
-        <button class="sample-code-button" onclick="openLanguage('Java', ${sampleCodeSectionIndex})">Java</button>
+        <button class="sample-code-button scsIndex-${sampleCodeSectionIndex} is-active" onclick="openLanguage('Curl', ${sampleCodeSectionIndex})">Curl</button>
+        <button class="sample-code-button scsIndex-${sampleCodeSectionIndex}" onclick="openLanguage('Nodejs', ${sampleCodeSectionIndex})">Nodejs</button>
+        <button class="sample-code-button scsIndex-${sampleCodeSectionIndex}" onclick="openLanguage('Python', ${sampleCodeSectionIndex})">Python</button>
+        <button class="sample-code-button scsIndex-${sampleCodeSectionIndex}" onclick="openLanguage('Java', ${sampleCodeSectionIndex})">Java</button>
       </div>
       <div id="Curl-${sampleCodeSectionIndex}" class="sample-language-${sampleCodeSectionIndex}">
         ${generateSample(attrs, "curl-template" + templateSuffix, "language-console", "console")}
