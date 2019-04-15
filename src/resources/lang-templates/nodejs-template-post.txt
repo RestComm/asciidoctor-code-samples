@@ -2,6 +2,7 @@ const request = require('request');
 
 // Change 'mycompany' to the desired restcomm organization
 const RESTCOMM_DOMAIN = 'mycompany.restcomm.com';
+// Provide your Account Sid and Auth Token from your Console Account page
 const ACCOUNT_SID = 'my_ACCOUNT_SID';
 const AUTH_TOKEN = 'my_AUTH_TOKEN';
 ${attrs.additionalParameters}

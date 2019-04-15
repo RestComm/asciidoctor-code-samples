@@ -14,6 +14,7 @@ const expectedOutputNodeGet = 'const request = require(\'request\');\n' +
   '\n' +
   '// Change \'mycompany\' to the desired restcomm organization\n' +
   'const RESTCOMM_DOMAIN = \'mycompany.restcomm.com\';\n' +
+  '// Provide your Account Sid and Auth Token from your Console Account page\n' +
   'const ACCOUNT_SID = \'my_ACCOUNT_SID\';\n' +
   'const AUTH_TOKEN = \'my_AUTH_TOKEN\';\n' +
   '\n' +
@@ -84,6 +85,7 @@ const expectedOutputNodePost = 'const request = require(\'request\');\n' +
   '\n' +
   '// Change \'mycompany\' to the desired restcomm organization\n' +
   'const RESTCOMM_DOMAIN = \'mycompany.restcomm.com\';\n' +
+  '// Provide your Account Sid and Auth Token from your Console Account page\n' +
   'const ACCOUNT_SID = \'my_ACCOUNT_SID\';\n' +
   'const AUTH_TOKEN = \'my_AUTH_TOKEN\';\n' +
   '\n' +
@@ -175,6 +177,7 @@ const expectedOutputNodePut = 'const request = require(\'request\');\n' +
   '\n' +
   '// Change \'mycompany\' to the desired restcomm organization\n' +
   'const RESTCOMM_DOMAIN = \'mycompany.restcomm.com\';\n' +
+  '// Provide your Account Sid and Auth Token from your Console Account page\n' +
   'const ACCOUNT_SID = \'my_ACCOUNT_SID\';\n' +
   'const AUTH_TOKEN = \'my_AUTH_TOKEN\';\n' +
   '\n' +
@@ -256,6 +259,7 @@ const expectedOutputNodeGetMultivar = 'const request = require(\'request\');\n' 
   '\n' +
   '// Change \'mycompany\' to the desired restcomm organization\n' +
   'const RESTCOMM_DOMAIN = \'mycompany.restcomm.com\';\n' +
+  '// Provide your Account Sid and Auth Token from your Console Account page\n' +
   'const ACCOUNT_SID = \'my_ACCOUNT_SID\';\n' +
   'const AUTH_TOKEN = \'my_AUTH_TOKEN\';\n' +
   '// Provide additional path parameters if applicable\n' +
@@ -326,6 +330,7 @@ const expectedOutputNodeGetNovar = 'const request = require(\'request\');\n' +
   '\n' +
   '// Change \'mycompany\' to the desired restcomm organization\n' +
   'const RESTCOMM_DOMAIN = \'mycompany.restcomm.com\';\n' +
+  '// Provide your Account Sid and Auth Token from your Console Account page\n' +
   'const ACCOUNT_SID = \'my_ACCOUNT_SID\';\n' +
   'const AUTH_TOKEN = \'my_AUTH_TOKEN\';\n' +
   '\n' +
