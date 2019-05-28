@@ -4,8 +4,6 @@ import java.io.*;
 import java.util.Base64;
 
 public class JavaSampleClass {
-   // Change 'mycompany' to the desired restcomm organization
-   public static final String RESTCOMM_DOMAIN = "mycompany.restcomm.com";
    // Provide your Account Sid and Auth Token from your Console Account page
    public static final String ACCOUNT_SID = "my_ACCOUNT_SID";
    public static final String AUTH_TOKEN = "my_AUTH_TOKEN";
@@ -15,7 +13,7 @@ public class JavaSampleClass {
       String userAndPass = ACCOUNT_SID + ':' + AUTH_TOKEN;
       String encoded = Base64.getEncoder().encodeToString(userAndPass.getBytes());
 
-      URL url = new URL(("https://" + RESTCOMM_DOMAIN + "/restcomm/2012-04-24/${attrs.urlSuffix}");
+      URL url = new URL(("https://mycompany.restcomm.com/restcomm/2012-04-24/${attrs.urlSuffix}");
       HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();
       conn.setRequestProperty("Authorization", "Basic " + encoded);
       conn.setRequestMethod("${attrs.httpMethod}");

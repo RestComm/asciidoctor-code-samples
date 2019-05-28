@@ -115,7 +115,7 @@ function generateSample(attrs, templateFile, language, dataLanguage) {
   })
 
   // Notice we are replacing 3 or more new lines with just 2 to account for huge empty spaces when some parameters are not populated
-  return `<pre class="highlightjs highlight"><code class="${language} hljs" data-lang="${dataLanguage}">${templateStringInterpolated}</code></pre>`.replace(/(\r\n|\n|\r){3,}/gm, "$1$1");
+  return `<pre class="highlightjs highlight"><code class="${language} hljs samplecode-container" data-lang="${dataLanguage}">${templateStringInterpolated}</code></pre>`.replace(/(\r\n|\n|\r){3,}/gm, "$1$1");
 }
 
 const generateSamplesDiv = function(parent, attrs) {

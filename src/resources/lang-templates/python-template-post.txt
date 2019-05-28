@@ -2,8 +2,6 @@ from http.client import HTTPSConnection
 from base64 import b64encode
 from urllib.parse import urlencode
 
-# Change 'mycompany' to the desired restcomm organization
-RESTCOMM_DOMAIN = 'mycompany.restcomm.com'
 # Provide your Account Sid and Auth Token from your Console Account page
 ACCOUNT_SID = 'my_ACCOUNT_SID'
 AUTH_TOKEN = 'my_AUTH_TOKEN'
@@ -19,7 +17,7 @@ params = urlencode({
 ${attrs.normalizedBodyParameters}
 })
 
-conn = HTTPSConnection(RESTCOMM_DOMAIN)
+conn = HTTPSConnection('mycompany.restcomm.com')
 conn.request("${attrs.httpMethod}", '/restcomm/2012-04-24/${attrs.urlSuffix}',
       params, headers=headers)
 res = conn.getresponse()
