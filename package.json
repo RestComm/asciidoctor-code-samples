@@ -1,6 +1,6 @@
 {
   "name": "asciidoctor-code-samples",
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0-beta.4",
   "description": "Asciidoctor tabbed code samples js extension for API docs",
   "main": "dist/node/asciidoctor-code-samples.js",
   "repository": {
