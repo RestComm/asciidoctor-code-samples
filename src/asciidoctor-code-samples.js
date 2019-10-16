@@ -33,12 +33,25 @@ function generateSample(attrs, templateFile, language, dataLanguage) {
         return `   '${split[0]}': '${split[1]}'`
       }).join(',\n')
     }
+    if (attrs.headers) {
+      attrs.normalizedHeaderParameters = ',\n' + attrs.headers.split(',')
+        .map((keyValue) => {
+          const keyValueArray = keyValue.split(':');
+          return `    '${keyValueArray[0].trim()}': '${keyValueArray[1].trim()}'`;
+        })
+        .join(",\n");
+    }
   } else if (templateFile.includes("curl")) {
     if (putOrPost(attrs.httpMethod)) {
       // Normalize from "From=19876543212&To=13216549878&..." to "-d 'From=19876543212', 'To=13216549878', ..."
       attrs.normalizedBodyParameters = attrs.bodyParameters.split('&')
         .map(keyValue => `   -d '${keyValue}'`)
         .join(" \\ \n")
+    }
+    if (attrs.headers) {
+      attrs.normalizedHeaderParameters = '\\ \n' + attrs.headers.split(',')
+        .map(keyValue => `   -H '${keyValue.trim()}'`)
+        .join(" \\ \n");
     }
   } else if (templateFile.includes("node")) {
     if (putOrPost(attrs.httpMethod)) {
@@ -49,7 +62,16 @@ function generateSample(attrs, templateFile, language, dataLanguage) {
         return `         '${split[0]}': '${split[1]}'`
       }).join(',\n')
     }
+    if (attrs.headers) {
+      attrs.normalizedHeaderParameters = ', \n      headers: {\n' + attrs.headers.split(',')
+        .map((keyValue) => {
+          const keyValueArray = keyValue.split(':');
+          return `          '${keyValueArray[0].trim()}': '${keyValueArray[1].trim()}'`;
+        })
+        .join(",\n") + '\n      }';
+    }
   } else {
+    // Java
     if (putOrPost(attrs.httpMethod)) {
       // For Java Post parameters are already in normalized form, we just need to beautify a bit
       attrs.normalizedBodyParameters = attrs.bodyParameters.split('&')
@@ -60,6 +82,14 @@ function generateSample(attrs, templateFile, language, dataLanguage) {
       if (attrs.normalizedBodyParameters[attrs.normalizedBodyParameters.length - 1] === '&') {
         attrs.normalizedBodyParameters = attrs.normalizedBodyParameters.slice(0, -1)
       }
+    }
+    if (attrs.headers) {
+      attrs.normalizedHeaderParameters = '\n' + attrs.headers.split(',')
+        .map(keyValue => {
+          const keyValueArray = keyValue.split(':');
+          return `      conn.setRequestProperty("${keyValueArray[0].trim()}", "${keyValueArray[1].trim()}");`;
+        })
+        .join("\n");
     }
   }
 
@@ -177,7 +207,7 @@ const chartBlockMacro = function () {
   const self = this
 
   self.named('samplecode')
-  this.positionalAttributes(['httpMethod', 'urlSuffix']);
+  this.positionalAttributes(['httpMethod', 'urlSuffix', 'headers']);
 
   self.process(function (parent, target, attrs) {
     // If attrs have attribute named $$keys it means that a special Hash object is used, so we need

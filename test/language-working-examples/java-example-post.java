@@ -13,10 +13,16 @@ public class JavaSampleClass {
       String userAndPass = ACCOUNT_SID + ':' + AUTH_TOKEN;
       String encoded = Base64.getEncoder().encodeToString(userAndPass.getBytes());
 
-      URL url = new URL("https://mycompany.restcomm.com/restcomm/2012-04-24/${attrs.urlSuffix}");
+      URL url = new URL(("https://mycompany.restcomm.com/restcomm/2012-04-24/${attrs.urlSuffix}");
       HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();
-      conn.setRequestProperty("Authorization", "Basic " + encoded);${attrs.normalizedHeaderParameters}
+      conn.setRequestProperty("Authorization", "Basic " + encoded);
       conn.setRequestMethod("${attrs.httpMethod}");
+      conn.setDoOutput(true);
+      DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+
+      // Update POST parameters accordingly
+      os.writeBytes("${attrs.normalizedBodyParameters}");
+      os.close();
 
       // Add your business logic below; response code can be obtained from 'conn.getResponseCode()' and input stream from 'conn.getInputStream()'
       ...

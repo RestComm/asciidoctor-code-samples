@@ -8,7 +8,7 @@ ${attrs.additionalParameters}
 request.({
       method: '${attrs.httpMethod}',
       url: 'https://mycompany.restcomm.com/restcomm/2012-04-24/${attrs.urlSuffix}',
-      auth: { 'user': ACCOUNT_SID, 'pass': AUTH_TOKEN },
+      auth: { 'user': ACCOUNT_SID, 'pass': AUTH_TOKEN }${attrs.normalizedHeaderParameters},
       form: {
 ${attrs.normalizedBodyParameters}
       }

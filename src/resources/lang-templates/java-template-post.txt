@@ -15,7 +15,7 @@ public class JavaSampleClass {
 
       URL url = new URL(("https://mycompany.restcomm.com/restcomm/2012-04-24/${attrs.urlSuffix}");
       HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();
-      conn.setRequestProperty("Authorization", "Basic " + encoded);
+      conn.setRequestProperty("Authorization", "Basic " + encoded);${attrs.normalizedHeaderParameters}
       conn.setRequestMethod("${attrs.httpMethod}");
       conn.setDoOutput(true);
       DataOutputStream os = new DataOutputStream(conn.getOutputStream());

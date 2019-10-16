@@ -8,7 +8,7 @@ AUTH_TOKEN = 'my_AUTH_TOKEN'
 ${attrs.additionalParameters}
 
 userAndPass = b64encode(bytes(ACCOUNT_SID + ':' + AUTH_TOKEN, 'utf-8')).decode("ascii")
-headers = { 'Authorization' : 'Basic %s' %  userAndPass${attrs.normalizedHeaderParameters},
+headers = { 'Authorization' : 'Basic %s' %  userAndPass ${attrs.normalizedHeaderParameters},
     'Content-type': 'application/x-www-form-urlencoded',
     'Accept': 'text/plain' }
 
@@ -22,5 +22,5 @@ conn.request("${attrs.httpMethod}", '/restcomm/2012-04-24/${attrs.urlSuffix}',
       params, headers=headers)
 res = conn.getresponse()
 
-# Add your business logic below; status can be found at 'res.status', reason at 'res.reason' and response body can be retrieved with res.read()
+// Add your business logic below; status can be found at 'res.status', reason at 'res.reason' and response body can be retrieved with res.read()
 ...

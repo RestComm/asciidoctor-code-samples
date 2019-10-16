@@ -15,7 +15,7 @@ public class JavaSampleClass {
 
       URL url = new URL("https://mycompany.restcomm.com/restcomm/2012-04-24/${attrs.urlSuffix}");
       HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();
-      conn.setRequestProperty("Authorization", "Basic " + encoded);${attrs.normalizedHeaderParameters}
+      conn.setRequestProperty("Authorization", "Basic " + encoded);
       conn.setRequestMethod("${attrs.httpMethod}");
 
       // Add your business logic below; response code can be obtained from 'conn.getResponseCode()' and input stream from 'conn.getInputStream()'
