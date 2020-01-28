@@ -608,7 +608,7 @@ describe('Asciidoctor Conversion', () => {
         expect(html).to.contain(expectedOutputJavaPost);
       })
       it('Should convert to sample code for account-related HTTP POST using headers', () => {
-        const input = accountPostHeadersInput;
+        const input = 'samplecode::[httpMethod="POST",urlSuffix="2fa/send.json",bodyParameters="From=XXXXXXXX&To=XXXXXXXX&service=2FA&body=Your verification code is: \{code}",headers="X-Header-1: Value1, X-Header-2: Value2"]';
         const registry = asciidoctor.Extensions.create();
         asciidoctorCodeSamples.register(registry);
         const html = asciidoctor.convert(input, { extension_registry: registry });
