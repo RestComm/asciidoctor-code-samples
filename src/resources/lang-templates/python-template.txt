@@ -10,7 +10,7 @@ userAndPass = b64encode(bytes(ACCOUNT_SID + ':' + AUTH_TOKEN, 'utf-8')).decode("
 headers = { 'Authorization' : 'Basic %s' %  userAndPass${attrs.normalizedHeaderParameters} }
 
 conn = HTTPSConnection('mycompany.restcomm.com')
-conn.request("${attrs.httpMethod}", '/restcomm/2012-04-24/${attrs.urlSuffix}',
+conn.request("${attrs.httpMethod}", '/api/2012-04-24/${attrs.urlSuffix}',
       headers=headers)
 res = conn.getresponse()
 

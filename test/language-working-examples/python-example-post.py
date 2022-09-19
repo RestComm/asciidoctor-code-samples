@@ -18,7 +18,7 @@ ${attrs.normalizedBodyParameters}
 })
 
 conn = HTTPSConnection('mycompany.restcomm.com')
-conn.request("${attrs.httpMethod}", '/restcomm/2012-04-24/${attrs.urlSuffix}',
+conn.request("${attrs.httpMethod}", '/api/2012-04-24/${attrs.urlSuffix}',
       params, headers=headers)
 res = conn.getresponse()
 

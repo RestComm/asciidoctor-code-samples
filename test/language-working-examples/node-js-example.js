@@ -6,7 +6,7 @@ const AUTH_TOKEN = 'YourAuthToken';
 
 request({
     method: 'GET',
-    url: 'https://' + RESTCOMM_DOMAIN + '/restcomm/2012-04-24/Accounts/' + ACCOUNT_SID + '/SMS/Messages.json',
+    url: 'https://' + RESTCOMM_DOMAIN + '/api/2012-04-24/Accounts/' + ACCOUNT_SID + '/SMS/Messages.json',
     auth: { 'user': ACCOUNT_SID, 'pass': AUTH_TOKEN },
     headers: {
       'X-Header-1': 'Value1',

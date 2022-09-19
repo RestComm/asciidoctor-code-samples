@@ -8,7 +8,7 @@ const asciidoctorCodeSamples = require('../src/asciidoctor-code-samples');
 const asciidoctor = require('asciidoctor.js')();
 
 // Expected results for GET methods
-const expectedOutputCurlGet = 'curl -X GET https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/ACCOUNT_SID/SMS/Messages.json  \\\n' +
+const expectedOutputCurlGet = 'curl -X GET https://mycompany.restcomm.com/api/2012-04-24/Accounts/ACCOUNT_SID/SMS/Messages.json  \\\n' +
   '   -u \'YourAccountSid:YourAuthToken\'';
 const expectedOutputNodeGet = 'const request = require(\'request\');\n' +
   '\n' +
@@ -18,7 +18,7 @@ const expectedOutputNodeGet = 'const request = require(\'request\');\n' +
   '\n' +
   'request({\n' +
   '      method: \'GET\',\n' +
-  '      url: \'https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages.json\',\n' +
+  '      url: \'https://mycompany.restcomm.com/api/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages.json\',\n' +
   '      auth: { \'user\': ACCOUNT_SID, \'pass\': AUTH_TOKEN }\n' +
   '   },\n' +
   '   function (error, response, body) {\n' +
@@ -37,7 +37,7 @@ const expectedOutputPythonGet = 'from http.client import HTTPSConnection\n' +
   'headers = { \'Authorization\' : \'Basic %s\' %  userAndPass }\n' +
   '\n' +
   'conn = HTTPSConnection(\'mycompany.restcomm.com\')\n' +
-  'conn.request("GET", \'/restcomm/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages.json\',\n' +
+  'conn.request("GET", \'/api/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages.json\',\n' +
   '      headers=headers)\n' +
   'res = conn.getresponse()\n' +
   '\n' +
@@ -58,7 +58,7 @@ const expectedOutputJavaGet = 'import java.net.URL;\n' +
   '      String userAndPass = ACCOUNT_SID + \':\' + AUTH_TOKEN;\n' +
   '      String encoded = Base64.getEncoder().encodeToString(userAndPass.getBytes());\n' +
   '\n' +
-  '      URL url = new URL("https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/" + ACCOUNT_SID + "/SMS/Messages.json");\n' +
+  '      URL url = new URL("https://mycompany.restcomm.com/api/2012-04-24/Accounts/" + ACCOUNT_SID + "/SMS/Messages.json");\n' +
   '      HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();\n' +
   '      conn.setRequestProperty("Authorization", "Basic " + encoded);\n' +
   '      conn.setRequestMethod("GET");\n' +
@@ -69,7 +69,7 @@ const expectedOutputJavaGet = 'import java.net.URL;\n' +
   '}';
 
 // Expected results for POST methods
-const expectedOutputCurlPost = 'curl -X POST https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/ACCOUNT_SID/SMS/Messages.json  \\\n' +
+const expectedOutputCurlPost = 'curl -X POST https://mycompany.restcomm.com/api/2012-04-24/Accounts/ACCOUNT_SID/SMS/Messages.json  \\\n' +
   '   -d \'From=19876543212\' \\\n' +
   '   -d \'To=13216549878\' \\\n' +
   '   -d \'Body=Test SMS from Restcomm\' \\\n' +
@@ -83,7 +83,7 @@ const expectedOutputNodePost = 'const request = require(\'request\');\n' +
   '\n' +
   'request.({\n' +
   '      method: \'POST\',\n' +
-  '      url: \'https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages.json\',\n' +
+  '      url: \'https://mycompany.restcomm.com/api/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages.json\',\n' +
   '      auth: { \'user\': ACCOUNT_SID, \'pass\': AUTH_TOKEN },\n' +
   '      form: {\n' +
   '         \'From\': \'19876543212\',\n' +
@@ -118,7 +118,7 @@ const expectedOutputPythonPost = 'from http.client import HTTPSConnection\n' +
   '})\n' +
   '\n' +
   'conn = HTTPSConnection(\'mycompany.restcomm.com\')\n' +
-  'conn.request("POST", \'/restcomm/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages.json\',\n' +
+  'conn.request("POST", \'/api/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages.json\',\n' +
   '      params, headers=headers)\n' +
   'res = conn.getresponse()\n' +
   '\n' +
@@ -139,7 +139,7 @@ const expectedOutputJavaPost = 'import java.net.URL;\n' +
   '      String userAndPass = ACCOUNT_SID + \':\' + AUTH_TOKEN;\n' +
   '      String encoded = Base64.getEncoder().encodeToString(userAndPass.getBytes());\n' +
   '\n' +
-  '      URL url = new URL(("https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/" + ACCOUNT_SID + "/SMS/Messages.json");\n' +
+  '      URL url = new URL(("https://mycompany.restcomm.com/api/2012-04-24/Accounts/" + ACCOUNT_SID + "/SMS/Messages.json");\n' +
   '      HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();\n' +
   '      conn.setRequestProperty("Authorization", "Basic " + encoded);\n' +
   '      conn.setRequestMethod("POST");\n' +
@@ -159,7 +159,7 @@ const expectedOutputJavaPost = 'import java.net.URL;\n' +
   '}';
 
 // Expected results for PUT
-const expectedOutputCurlPut = 'curl -X PUT https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/ACCOUNT_SID.xml  \\\n' +
+const expectedOutputCurlPut = 'curl -X PUT https://mycompany.restcomm.com/api/2012-04-24/Accounts/ACCOUNT_SID.xml  \\\n' +
   '   -d \'Password=NewPassword\' \\\n' +
   '   -u \'YourAccountSid:YourAuthToken\'';
 const expectedOutputNodePut = 'const request = require(\'request\');\n' +
@@ -170,7 +170,7 @@ const expectedOutputNodePut = 'const request = require(\'request\');\n' +
   '\n' +
   'request.({\n' +
   '      method: \'PUT\',\n' +
-  '      url: \'https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/\' + ACCOUNT_SID + \'.xml\',\n' +
+  '      url: \'https://mycompany.restcomm.com/api/2012-04-24/Accounts/\' + ACCOUNT_SID + \'.xml\',\n' +
   '      auth: { \'user\': ACCOUNT_SID, \'pass\': AUTH_TOKEN },\n' +
   '      form: {\n' +
   '         \'Password\': \'NewPassword\'\n' +
@@ -199,7 +199,7 @@ const expectedOutputPythonPut = 'from http.client import HTTPSConnection\n' +
   '})\n' +
   '\n' +
   'conn = HTTPSConnection(\'mycompany.restcomm.com\')\n' +
-  'conn.request("PUT", \'/restcomm/2012-04-24/Accounts/\' + ACCOUNT_SID + \'.xml\',\n' +
+  'conn.request("PUT", \'/api/2012-04-24/Accounts/\' + ACCOUNT_SID + \'.xml\',\n' +
   '      params, headers=headers)\n' +
   'res = conn.getresponse()\n' +
   '\n' +
@@ -220,7 +220,7 @@ const expectedOutputJavaPut = 'import java.net.URL;\n' +
   '      String userAndPass = ACCOUNT_SID + \':\' + AUTH_TOKEN;\n' +
   '      String encoded = Base64.getEncoder().encodeToString(userAndPass.getBytes());\n' +
   '\n' +
-  '      URL url = new URL(("https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/" + ACCOUNT_SID + ".xml");\n' +
+  '      URL url = new URL(("https://mycompany.restcomm.com/api/2012-04-24/Accounts/" + ACCOUNT_SID + ".xml");\n' +
   '      HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();\n' +
   '      conn.setRequestProperty("Authorization", "Basic " + encoded);\n' +
   '      conn.setRequestMethod("PUT");\n' +
@@ -237,7 +237,7 @@ const expectedOutputJavaPut = 'import java.net.URL;\n' +
   '}';
 
 // Expected results for multiple variables
-const expectedOutputCurlGetMultiVar = 'curl -X GET https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/ACCOUNT_SID/SMS/Messages/MESSAGE_SID.json  \\\n' +
+const expectedOutputCurlGetMultiVar = 'curl -X GET https://mycompany.restcomm.com/api/2012-04-24/Accounts/ACCOUNT_SID/SMS/Messages/MESSAGE_SID.json  \\\n' +
   '   -u \'YourAccountSid:YourAuthToken\'';
 const expectedOutputNodeGetMultiVar = 'const request = require(\'request\');\n' +
   '\n' +
@@ -249,7 +249,7 @@ const expectedOutputNodeGetMultiVar = 'const request = require(\'request\');\n' 
   '\n' +
   'request({\n' +
   '      method: \'GET\',\n' +
-  '      url: \'https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages/\' + MESSAGE_SID + \'.json\',\n' +
+  '      url: \'https://mycompany.restcomm.com/api/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages/\' + MESSAGE_SID + \'.json\',\n' +
   '      auth: { \'user\': ACCOUNT_SID, \'pass\': AUTH_TOKEN }\n' +
   '   },\n' +
   '   function (error, response, body) {\n' +
@@ -270,7 +270,7 @@ const expectedOutputPythonGetMultiVar = 'from http.client import HTTPSConnection
   'headers = { \'Authorization\' : \'Basic %s\' %  userAndPass }\n' +
   '\n' +
   'conn = HTTPSConnection(\'mycompany.restcomm.com\')\n' +
-  'conn.request("GET", \'/restcomm/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages/\' + MESSAGE_SID + \'.json\',\n' +
+  'conn.request("GET", \'/api/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages/\' + MESSAGE_SID + \'.json\',\n' +
   '      headers=headers)\n' +
   'res = conn.getresponse()\n' +
   '\n' +
@@ -292,7 +292,7 @@ const expectedOutputJavaGetMultiVar = 'import java.net.URL;\n' +
   '      String userAndPass = ACCOUNT_SID + \':\' + AUTH_TOKEN;\n' +
   '      String encoded = Base64.getEncoder().encodeToString(userAndPass.getBytes());\n' +
   '\n' +
-  '      URL url = new URL("https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/" + ACCOUNT_SID + "/SMS/Messages/" + MESSAGE_SID + ".json");\n' +
+  '      URL url = new URL("https://mycompany.restcomm.com/api/2012-04-24/Accounts/" + ACCOUNT_SID + "/SMS/Messages/" + MESSAGE_SID + ".json");\n' +
   '      HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();\n' +
   '      conn.setRequestProperty("Authorization", "Basic " + encoded);\n' +
   '      conn.setRequestMethod("GET");\n' +
@@ -303,7 +303,7 @@ const expectedOutputJavaGetMultiVar = 'import java.net.URL;\n' +
   '}';
 
 // Expected results for no variables
-const expectedOutputCurlGetNoVar = 'curl -X GET https://mycompany.restcomm.com/restcomm/2012-04-24/ExtensionsConfiguration.json  \\\n' +
+const expectedOutputCurlGetNoVar = 'curl -X GET https://mycompany.restcomm.com/api/2012-04-24/ExtensionsConfiguration.json  \\\n' +
   '   -u \'YourAccountSid:YourAuthToken\'';
 const expectedOutputNodeGetNoVar = 'const request = require(\'request\');\n' +
   '\n' +
@@ -313,7 +313,7 @@ const expectedOutputNodeGetNoVar = 'const request = require(\'request\');\n' +
   '\n' +
   'request({\n' +
   '      method: \'GET\',\n' +
-  '      url: \'https://mycompany.restcomm.com/restcomm/2012-04-24/ExtensionsConfiguration.json\',\n' +
+  '      url: \'https://mycompany.restcomm.com/api/2012-04-24/ExtensionsConfiguration.json\',\n' +
   '      auth: { \'user\': ACCOUNT_SID, \'pass\': AUTH_TOKEN }\n' +
   '   },\n' +
   '   function (error, response, body) {\n' +
@@ -332,7 +332,7 @@ const expectedOutputPythonGetNoVar = 'from http.client import HTTPSConnection\n'
   'headers = { \'Authorization\' : \'Basic %s\' %  userAndPass }\n' +
   '\n' +
   'conn = HTTPSConnection(\'mycompany.restcomm.com\')\n' +
-  'conn.request("GET", \'/restcomm/2012-04-24/ExtensionsConfiguration.json\',\n' +
+  'conn.request("GET", \'/api/2012-04-24/ExtensionsConfiguration.json\',\n' +
   '      headers=headers)\n' +
   'res = conn.getresponse()\n' +
   '\n' +
@@ -353,7 +353,7 @@ const expectedOutputJavaGetNoVar = 'import java.net.URL;\n' +
   '      String userAndPass = ACCOUNT_SID + \':\' + AUTH_TOKEN;\n' +
   '      String encoded = Base64.getEncoder().encodeToString(userAndPass.getBytes());\n' +
   '\n' +
-  '      URL url = new URL("https://mycompany.restcomm.com/restcomm/2012-04-24/ExtensionsConfiguration.json");\n' +
+  '      URL url = new URL("https://mycompany.restcomm.com/api/2012-04-24/ExtensionsConfiguration.json");\n' +
   '      HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();\n' +
   '      conn.setRequestProperty("Authorization", "Basic " + encoded);\n' +
   '      conn.setRequestMethod("GET");\n' +
@@ -364,7 +364,7 @@ const expectedOutputJavaGetNoVar = 'import java.net.URL;\n' +
   '}';
 
 // Expected results for headers with GET
-const expectedOutputCurlGetHeaders = 'curl -X GET https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/ACCOUNT_SID/SMS/Messages.json \\\n' +
+const expectedOutputCurlGetHeaders = 'curl -X GET https://mycompany.restcomm.com/api/2012-04-24/Accounts/ACCOUNT_SID/SMS/Messages.json \\\n' +
   '   -H \'X-Header-1: Value1\' \\\n' +
   '   -H \'X-Header-2: Value2\' \\\n' +
   '   -u \'YourAccountSid:YourAuthToken\'';
@@ -376,7 +376,7 @@ const expectedOutputNodeGetHeaders = 'const request = require(\'request\');\n' +
   '\n' +
   'request({\n' +
   '      method: \'GET\',\n' +
-  '      url: \'https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages.json\',\n' +
+  '      url: \'https://mycompany.restcomm.com/api/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages.json\',\n' +
   '      auth: { \'user\': ACCOUNT_SID, \'pass\': AUTH_TOKEN },\n' +
   '      headers: {\n' +
   '          \'X-Header-1\': \'Value1\',\n' +
@@ -401,7 +401,7 @@ const expectedOutputPythonGetHeaders = 'from http.client import HTTPSConnection\
   '    \'X-Header-2\': \'Value2\' }\n' +
   '\n' +
   'conn = HTTPSConnection(\'mycompany.restcomm.com\')\n' +
-  'conn.request("GET", \'/restcomm/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages.json\',\n' +
+  'conn.request("GET", \'/api/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages.json\',\n' +
   '      headers=headers)\n' +
   'res = conn.getresponse()\n' +
   '\n' +
@@ -422,7 +422,7 @@ const expectedOutputJavaGetHeaders = 'import java.net.URL;\n' +
   '      String userAndPass = ACCOUNT_SID + \':\' + AUTH_TOKEN;\n' +
   '      String encoded = Base64.getEncoder().encodeToString(userAndPass.getBytes());\n' +
   '\n' +
-  '      URL url = new URL("https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/" + ACCOUNT_SID + "/SMS/Messages.json");\n' +
+  '      URL url = new URL("https://mycompany.restcomm.com/api/2012-04-24/Accounts/" + ACCOUNT_SID + "/SMS/Messages.json");\n' +
   '      HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();\n' +
   '      conn.setRequestProperty("Authorization", "Basic " + encoded);\n' +
   '      conn.setRequestProperty("X-Header-1", "Value1");\n' +
@@ -435,7 +435,7 @@ const expectedOutputJavaGetHeaders = 'import java.net.URL;\n' +
   '}';
 
 // Expected results for headers with POST
-const expectedOutputCurlPostHeaders = 'curl -X POST https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/ACCOUNT_SID/SMS/Messages.json \\\n' +
+const expectedOutputCurlPostHeaders = 'curl -X POST https://mycompany.restcomm.com/api/2012-04-24/Accounts/ACCOUNT_SID/SMS/Messages.json \\\n' +
   '   -H \'X-Header-1: Value1\' \\\n' +
   '   -H \'X-Header-2: Value2\' \\\n' +
   '   -d \'From=19876543212\' \\\n' +
@@ -451,7 +451,7 @@ const expectedOutputNodePostHeaders = 'const request = require(\'request\');\n' 
   '\n' +
   'request.({\n' +
   '      method: \'POST\',\n' +
-  '      url: \'https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages.json\',\n' +
+  '      url: \'https://mycompany.restcomm.com/api/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages.json\',\n' +
   '      auth: { \'user\': ACCOUNT_SID, \'pass\': AUTH_TOKEN },\n' +
   '      headers: {\n' +
   '          \'X-Header-1\': \'Value1\',\n' +
@@ -492,7 +492,7 @@ const expectedOutputPythonPostHeaders = 'from http.client import HTTPSConnection
   '})\n' +
   '\n' +
   'conn = HTTPSConnection(\'mycompany.restcomm.com\')\n' +
-  'conn.request("POST", \'/restcomm/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages.json\',\n' +
+  'conn.request("POST", \'/api/2012-04-24/Accounts/\' + ACCOUNT_SID + \'/SMS/Messages.json\',\n' +
   '      params, headers=headers)\n' +
   'res = conn.getresponse()\n' +
   '\n' +
@@ -513,7 +513,7 @@ const expectedOutputJavaPostHeaders = 'import java.net.URL;\n' +
   '      String userAndPass = ACCOUNT_SID + \':\' + AUTH_TOKEN;\n' +
   '      String encoded = Base64.getEncoder().encodeToString(userAndPass.getBytes());\n' +
   '\n' +
-  '      URL url = new URL(("https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/" + ACCOUNT_SID + "/SMS/Messages.json");\n' +
+  '      URL url = new URL(("https://mycompany.restcomm.com/api/2012-04-24/Accounts/" + ACCOUNT_SID + "/SMS/Messages.json");\n' +
   '      HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();\n' +
   '      conn.setRequestProperty("Authorization", "Basic " + encoded);\n' +
   '      conn.setRequestProperty("X-Header-1", "Value1");\n' +

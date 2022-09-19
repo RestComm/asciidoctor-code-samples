@@ -6,7 +6,7 @@ const AUTH_TOKEN = 'my_AUTH_TOKEN';
 
 request.({
     method: 'POST',
-    url: 'https://mycompany.restcomm.com/restcomm/2012-04-24/Accounts/' + ACCOUNT_SID + '/SMS/Messages.json',
+    url: 'https://mycompany.restcomm.com/api/2012-04-24/Accounts/' + ACCOUNT_SID + '/SMS/Messages.json',
     auth: { 'user': ACCOUNT_SID, 'pass': AUTH_TOKEN },
     form: {
       'From': '19876543212',
