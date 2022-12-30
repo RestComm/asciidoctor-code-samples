@@ -27,7 +27,7 @@
     "asciidoctor.js": "^1.5.9",
     "chai": "^4.2.0",
     "dirty-chai": "^2.0.1",
-    "mocha": "^6.0.2",
+    "mocha": "^10.2.0",
     "request": "^2.88.0"
   },
   "bugs": {
